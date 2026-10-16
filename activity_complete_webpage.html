@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complete Multimedia Webpage</title>
+    <style>
+        /* Modern CSS Reset & Variable Colors */
+        :root {
+            --primary-color: #a91d22; /* Institutional red accent */
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--primary-color), #7a1215);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Container Sections */
+        .section {
+            background-color: var(--card-bg);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+            font-size: 1.8rem;
+        }
+
+        /* Part 1: Media Grid Layout */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .media-card {
+            background: #fdfdfd;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .media-card h4 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        audio, video {
+            width: 100%;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+
+        /* Part 2: Lists Design */
+        .list-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .list-box {
+            background: #fdfdfd;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .list-box h3 {
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            color: #444;
+        }
+
+        ol, ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        li ul {
+            margin-top: 4px;
+            margin-bottom: 4px;
+            list-style-type: circle;
+        }
+
+        /* Part 3: Table Design */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: #ffffff;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            transition: background 0.2s;
+        }
+
+        /* Part 4: Form Design */
+        form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 600px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            background-color: #fafafa;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: #ffffff;
+            box-shadow: 0 0 5px rgba(169, 29, 34, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button[type="submit"] {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #8a1418;
+        }
+
+        button[type="reset"] {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        button[type="reset"]:hover {
+            background-color: #d0d0d0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Introduction to Computing</h1>
+        <p>Activity 4: My Complete Multimedia Webpage</p>
+    </header>
+
+    <!-- PART 1: AUDIO & VIDEO PLAYLIST -->
+    <div class="section">
+        <h2>Part 1: My Playlist</h2>
+        <div class="media-grid">
+            <!-- Audio 1 (with required autoplay loop attributes) -->
+            <div class="media-card">
+                <h4>Song 1: FE!N - Travis Scott ft. Playboi Carti</h4>
+                <audio controls autoplay loop>
+                    <source src="Recording.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            <!-- Audio 2 -->
+            <div class="media-card">
+                <h4>Song 2: Alam Mo Ba Gurl - Hev Abi</h4>
+                <audio controls>
+                    <source src="Recording.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            <!-- Video 1 -->
+            <div class="media-card">
+                <h4>Music Video 1: SAD! - XXXTENTACION</h4>
+                <video controls width="100%">
+                    <source src="xxxtentacion_sad.mp4" type="video/mp4">
+                    Your browser does not support the video element.
+                </video>
+            </div>
+            <!-- Video 2 -->
+            <div class="media-card">
+                <h4>Music Video 2: Redrum - 21 Savage</h4>
+                <video controls width="100%">
+                    <source src="21_savage_redrum.mp4" type="video/mp4">
+                    Your browser does not support the video element.
+                </video>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- PART 2: MY TOP 10 LISTS -->
+    <div class="section">
+        <h2>Part 2: My Top 10 Lists</h2>
+        <div class="list-container">
+            <!-- Ordered List 1 -->
+            <div class="list-box">
+                <h3>🎬 Top 10 Movies</h3>
+                <ol>
+                    <li>Inception</li>
+                    <li>Interstellar</li>
+                    <li>The Dark Knight</li>
+                    <li>Avatar</li>
+                    <li>Titanic</li>
+                    <li>Avengers: Endgame</li>
+                    <li>The Godfather</li>
+                    <li>Pulp Fiction</li>
+                    <li>Forrest Gump</li>
+                    <li>The Matrix</li>
+                </ol>
+            </div>
+            <!-- Ordered List 2 -->
+            <div class="list-box">
+                <h3>🎵 Top 10 Songs</h3>
+                <ol>
+                    <li>Alam Mo Ba Gurl - Hev Abi</li>
+                    <li>Ang Huling El Bimbo - Eraserheads</li>
+                    <li>SAD! - XXXTENTACION</li>
+                    <li>Redrum - 21 Savage</li>
+                    <li>Ginto Sa Pasay - Uncle Dags</li>
+                    <li>Babaero - Hev Abi</li>
+                    <li>Moonlight - XXXTENTACION</li>
+                    <li>Bank Account - 21 Savage</li>
+                    <li>Lil Kasalanan Shorty - Hev Abi</li>
+                    <li>Jocelynang Baliwag - Uncle Dags</li>
+                </ol>
+            </div>
+            <!-- Unordered List -->
+            <div class="list-box">
+                <h3>⭐ Top 10 Idols</h3>
+                <ul>
+                    <li>Hev Abi</li>
+                    <li>Uncle Dags</li>
+                    <li>21 Savage</li>
+                    <li>XXXTENTACION</li>
+                    <li>Eraserheads</li>
+                    <li>Travis Scott</li>
+                    <li>Drake</li>
+                    <li>Metro Boomin</li>
+                    <li>Post Malone</li>
+                    <li>Kendrick Lamar</li>
+                </ul>
+            </div>
+            <!-- Nested List Element -->
+            <div class="list-box">
+                <h3>📁 My Idols by Category</h3>
+                <ul>
+                    <li>Local (Pinoy Hip-Hop / Rock)
+                        <ul>
+                            <li>Hev Abi</li>
+                            <li>Uncle Dags</li>
+                            <li>Eraserheads</li>
+                        </ul>
+                    </li>
+                    <li>International (Hip-Hop / Rap)
+                        <ul>
+                            <li>21 Savage</li>
+                            <li>XXXTENTACION</li>
+                            <li>Travis Scott</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- PART 3: WEEKLY SCHEDULE -->
+    <div class="section">
+        <h2>Part 3: Weekly Schedule</h2>
+        <div class="table-responsive">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>8:00 - 9:00</td>
+                        <td>Gym 🏋️</td>
+                        <td>School 🏫</td>
+                        <td>Gym 🏋️</td>
+                        <td>School 🏫</td>
+                    </tr>
+                    <tr>
+                        <td>9:00 - 12:00</td>
+                        <td>School 🏫</td>
+                        <td>School 🏫</td>
+                        <td>School 🏫</td>
+                        <td>School 🏫</td>
+                    </tr>
+                    <tr>
+                        <td>12:00 - 1:00</td>
+                        <td>Lunch 🍽️</td>
+                        <td>Lunch 🍽️</td>
+                        <td>Lunch 🍽️</td>
+                        <td>Lunch 🍽️</td>
+                    </tr>
+                    <tr>
+                        <td>1:00 - 5:00</td>
+                        <td>School 🏫</td>
+                        <td>School 🏫</td>
+                        <td>School 🏫</td>
+                        <td>School 🏫</td>
+                    </tr>
+                    <tr>
+                        <td>5:00 - 6:00</td>
+                        <td>Exercise 🏃</td>
+                        <td>Meeting 📋</td>
+                        <td>Exercise 🏃</td>
+                        <td>Meeting 📋</td>
+                    </tr>
+                    <tr>
+                        <td>6:00 - 8:00</td>
+                        <td>Dinner 🍕</td>
+                        <td>Dinner 🍕</td>
+                        <td>Dinner 🍕</td>
+                        <td>Dinner 🍕</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- PART 4: REGISTRATION FORM -->
+    <div class="section">
+        <h2>Part 4: Registration Form</h2>
+        <!-- Removed action="submit.html" and handled submission locally -->
+        <form onsubmit="event.preventDefault(); alert('Registered!'); window.scrollTo({top: 0, behavior: 'smooth'}); this.reset();">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required placeholder="name@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required placeholder="Create a password">
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required min="1" max="120" placeholder="Your age">
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="" disabled selected>Select your gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" name="country" required>
+                    <option value="" disabled selected>Select your country</option>
+                    <option value="Philippines">Philippines</option>
+                    <option value="USA">USA</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message / Comment Box:</label>
+                <textarea id="message" name="message" rows="5" placeholder="Leave a message..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+            </div>
+        </form>
+    </div>
+
+
+    <footer>
+        <p>Submitted by: Buen Carlo B. Pan | Introduction to Computing</p>
+    </footer>
+
+</body>
+</html>
