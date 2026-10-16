@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Complete Multimedia Webpage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --metal-steel: #8a8f98;
+      --metal-gunmetal: #2a2f34;
+      --metal-dark: #0e0f12;
+      --metal-silver: #c0c8d2;
+      --line: rgba(255,255,255,0.08);
+      --card: rgba(10,11,14,0.62);
+      --cormorant: 'Cormorant Garamond', 'Times New Roman', serif;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #000;
+      color: #e6e9ee;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- Backdrop ---------- */
+    .backdrop {
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIxIiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDYiLz48L3N2Zz4=');
+      background-size: 80px 80px;
+      filter: blur(2px) brightness(0.45);
+      transform: scale(1.06);
+    }
+    .vignette {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.8) 100%);
+    }
+
+    .main { position: relative; z-index: 2; padding: 2rem 1.5rem 3rem; max-width: 1200px; margin: 0 auto; }
+
+    /* ---------- Header / logo ---------- */
+    header { text-align: center; padding: 1rem 0 2.5rem; }
+    .logo-img {
+      width: 100%; max-width: 760px; height: auto;
+      filter: drop-shadow(0 0 25px rgba(255,255,255,0.12));
+      opacity: 0.95; user-select: none;
+    }
+
+    /* ---------- Section titles ---------- */
+    .title-wrap { text-align: center; margin-bottom: 2rem; }
+    .section-title {
+      font-family: var(--cormorant);
+      font-weight: 300; font-style: italic;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      letter-spacing: 0.1em;
+      background: linear-gradient(to right, #fff, #aaa, #666);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    .section-eyebrow {
+      display: block; font-size: 0.7rem; letter-spacing: 0.4em;
+      color: rgba(255,255,255,0.25); text-transform: uppercase; margin-bottom: 0.4rem;
+    }
+
+    .section { margin-bottom: 5rem; }
+
+    /* ---------- Cards ---------- */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 1.4rem;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.4s ease, transform 0.4s ease;
+    }
+    .card:hover { border-color: rgba(255,255,255,0.18); }
+    .card h3, .card h4 {
+      font-family: var(--cormorant);
+      font-style: italic; font-weight: 400;
+      font-size: 1.25rem; letter-spacing: 0.05em;
+      color: var(--metal-silver);
+      margin-bottom: 0.9rem;
+    }
+
+    /* ---------- Part 1: media ---------- */
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .media-card { text-align: center; }
+    audio, video { width: 100%; border-radius: 12px; margin-top: 4px; background: #000; }
+    audio { filter: invert(0.9) grayscale(1) contrast(0.9); }
+
+    /* ---------- Part 2: lists ---------- */
+    .list-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+    ol, ul { padding-left: 1.3rem; }
+    li { margin-bottom: 6px; color: #cfd5dd; font-weight: 300; }
+    li::marker { color: var(--metal-steel); }
+    li ul { margin-top: 4px; list-style-type: circle; }
+
+    /* Idol avatar carousel (built from the Top 10 Idols list) */
+    .carousel-wrap { margin-top: 3rem; }
+    .members-carousel {
+      overflow: hidden; padding-bottom: 1rem;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+    .members-track {
+      display: flex; align-items: flex-start; width: max-content; gap: 0; padding: 1rem 0;
+      animation: scrollMembers 40s linear infinite;
+    }
+    @keyframes scrollMembers { to { transform: translateX(-50%); } }
+    .member-item { flex-shrink: 0; text-align: center; width: 96px; margin-right: 2.2rem; transition: transform 0.4s ease; }
+    .member-item:hover { transform: scale(1.06) translateY(-2px); }
+    .hof-ring {
+      padding: 3px; border-radius: 50%; display: inline-block;
+      background: linear-gradient(to bottom, rgba(138,143,152,0.4), #2a2f34, rgba(138,143,152,0.2));
+      transition: background 0.4s ease;
+    }
+    .member-item:hover .hof-ring { background: linear-gradient(to bottom, rgba(192,200,210,0.6), rgba(192,200,210,0.3)); }
+    .hof-inner { padding: 2px; border-radius: 50%; background: var(--metal-dark); }
+    .hof-avatar {
+      width: 72px; height: 72px; border-radius: 50%; background: #1d2227;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--cormorant); font-size: 1.9rem; color: #d4d9e0; text-transform: uppercase;
+    }
+    .member-name { margin-top: 0.6rem; font-size: 0.72rem; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); }
+
+    /* ---------- Part 3: table ---------- */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 560px; }
+    th, td { padding: 0.9rem 1rem; text-align: center; border: 1px solid var(--line); font-weight: 300; }
+    th {
+      font-family: var(--cormorant); font-style: italic; font-weight: 400;
+      font-size: 1.15rem; letter-spacing: 0.08em;
+      color: #fff; background: linear-gradient(180deg, #2a2f34, #14171a);
+    }
+    tbody tr:nth-child(even) { background: rgba(255,255,255,0.025); }
+    tbody tr { transition: background 0.3s ease; }
+    tbody tr:hover { background: rgba(255,255,255,0.07); }
+    td:first-child { color: var(--metal-steel); letter-spacing: 0.05em; font-size: 0.9rem; }
+
+    /* ---------- Part 4: form ---------- */
+    form { display: grid; gap: 1.1rem; max-width: 620px; margin: 0 auto; }
+    .form-group { display: flex; flex-direction: column; }
+    label {
+      margin-bottom: 0.4rem; font-size: 0.7rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 500;
+    }
+    input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
+      width: 100%; padding: 0.8rem 1rem;
+      background: rgba(0,0,0,0.35); color: #fff;
+      border: 1px solid var(--line); border-radius: 12px;
+      font-family: inherit; font-size: 0.95rem; font-weight: 300;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    ::placeholder { color: rgba(255,255,255,0.22); }
+    select option { background: #0e0f12; color: #fff; }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: rgba(192,200,210,0.55);
+      box-shadow: 0 0 0 3px rgba(192,200,210,0.08);
+    }
+    .button-group { display: flex; gap: 0.8rem; margin-top: 0.5rem; }
+    button {
+      flex: 1; padding: 0.85rem 1.5rem; font-family: inherit;
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase;
+      border-radius: 999px; cursor: pointer; transition: all 0.3s ease;
+    }
+    button[type="submit"] {
+      background: linear-gradient(135deg, #f0f3f7, #b0b8c4 45%, #5a626c);
+      color: #0a0c0e; border: 1px solid transparent;
+    }
+    button[type="submit"]:hover { box-shadow: 0 0 24px rgba(255,255,255,0.2); transform: translateY(-1px); }
+    button[type="reset"] { background: transparent; color: var(--metal-silver); border: 1px solid var(--line); }
+    button[type="reset"]:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+    footer {
+      text-align: center; padding: 2rem 1rem; margin-top: 2rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+    }
+
+    /* ---------- Splash ---------- */
+    .splash {
+      position: fixed; inset: 0; z-index: 100; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      background: #0a0a0a; overflow: hidden;
+      transition: opacity 0.9s cubic-bezier(0.23,1,0.32,1), transform 0.9s cubic-bezier(0.23,1,0.32,1);
+    }
+    .splash.hide { opacity: 0; pointer-events: none; transform: scale(1.04); }
+    .splash-bg {
+      position: absolute; inset: 0;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIxIiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDYiLz48L3N2Zz4=');
+      background-size: 80px 80px; filter: blur(3px) brightness(0.35); transform: scale(1.06);
+    }
+    .splash-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.8) 100%); }
+    .splash-text { position: relative; text-align: center; padding: 0 1rem; }
+    .splash-title {
+      font-family: var(--cormorant); font-weight: 300; font-style: italic;
+      font-size: clamp(1.1rem, 4vw, 2.5rem); letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.82); text-shadow: 0 0 30px rgba(255,255,255,0.06);
+    }
+    .splash-sub { margin-top: 1.5rem; font-size: 0.75rem; letter-spacing: 0.4em; color: rgba(255,255,255,0.2); text-transform: uppercase; }
+
+    @media (prefers-reduced-motion: reduce) { .members-track { animation: none; } }
+    @media (max-width: 640px) {
+      .main { padding: 1.2rem 0.8rem 2rem; }
+      .hof-avatar { width: 58px; height: 58px; font-size: 1.5rem; }
+      .member-item { width: 80px; }
+      .button-group { flex-direction: column; }
+    }
+
+    /* ---------- Rotating title ---------- */
+    header { text-align:center; padding:1rem 0 2.5rem; }
+    .title-marquee {
+      overflow:hidden; padding:1.2rem 0;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+    .title-track { display:flex; width:max-content; animation: scrollMembers 28s linear infinite; }
+    .title-item {
+      font-family: var(--cormorant); font-style: italic; font-weight: 300;
+      font-size: clamp(2.4rem, 7vw, 5.2rem); letter-spacing: 0.06em; line-height: 1.35;
+      padding: 0 1.4rem 0.25rem; white-space: nowrap;
+      background: linear-gradient(135deg,#f0f3f7,#b0b8c4 45%,#5a626c);
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+      filter: drop-shadow(0 0 18px rgba(255,255,255,0.18));
+    }
+    .title-sep { align-self:center; color:rgba(255,255,255,0.25); font-size:1.2rem; padding:0 .6rem; }
+    .header-sub { font-size:.8rem; letter-spacing:.7em; color:rgba(255,255,255,.3); text-transform:uppercase; font-weight:300; margin-top:.4rem; }
+
+    /* ---------- Sidebar ---------- */
+    .sidebar {
+      position:fixed; top:0; left:0; bottom:0; width:240px; z-index:50;
+      background:rgba(8,9,11,0.88); backdrop-filter:blur(14px);
+      border-right:1px solid var(--line); padding:2rem 1.2rem;
+      display:flex; flex-direction:column; transition:transform .45s cubic-bezier(.23,1,.32,1);
+    }
+    .sidebar-brand { font-family:var(--cormorant); font-style:italic; font-size:1.5rem; color:#fff; letter-spacing:.08em; margin-bottom:.2rem; }
+    .sidebar-tag { font-size:.62rem; letter-spacing:.35em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-bottom:2rem; }
+    .sidebar nav { display:flex; flex-direction:column; gap:.4rem; }
+    .sidebar nav a {
+      display:flex; align-items:center; gap:.8rem; padding:.75rem 1rem; border-radius:12px;
+      color:rgba(255,255,255,.55); text-decoration:none; font-size:.82rem; letter-spacing:.12em;
+      border:1px solid transparent; transition:all .3s ease;
+    }
+    .sidebar nav a:hover { color:#fff; background:rgba(255,255,255,.05); border-color:var(--line); transform:translateX(3px); }
+    .sidebar nav a.active { color:#fff; background:linear-gradient(135deg,rgba(192,200,210,.16),rgba(255,255,255,.03)); border-color:rgba(192,200,210,.3); }
+    .sidebar nav a .ico { font-size:1rem; width:1.4rem; text-align:center; }
+    .sidebar-foot { margin-top:auto; font-size:.62rem; letter-spacing:.2em; color:rgba(255,255,255,.25); text-transform:uppercase; line-height:1.8; }
+    .menu-btn {
+      position:fixed; top:1rem; left:1rem; z-index:60; width:46px; height:46px; padding:0; flex:none;
+      border-radius:50%; background:rgba(14,15,18,.9); color:#fff; border:1px solid var(--line);
+      font-size:1.2rem; letter-spacing:0; display:none;
+    }
+    .scrim { position:fixed; inset:0; z-index:45; background:rgba(0,0,0,.6); opacity:0; pointer-events:none; transition:opacity .3s; }
+    .scrim.show { opacity:1; pointer-events:auto; }
+    .main { margin-left:240px; max-width:1100px; }
+    html { scroll-behavior:smooth; }
+    .section, .carousel-wrap { scroll-margin-top:1.5rem; }
+
+    /* ---------- Preview images ---------- */
+    .preview {
+      position:relative; width:100%; aspect-ratio:16/9; border-radius:14px; overflow:hidden; margin-bottom:1rem;
+      background:linear-gradient(135deg,#2a2f34,#0e0f12); border:1px solid var(--line);
+      display:flex; align-items:center; justify-content:center; font-size:2.6rem; color:rgba(255,255,255,.2);
+    }
+    .preview img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
+    .media-card:hover .preview img { transform:scale(1.05); }
+    .media-card { display:flex; flex-direction:column; }
+    .media-card h4 { margin-bottom:.8rem; }
+    .media-card audio, .media-card video { margin-top:auto; }
+    .hof-avatar { overflow:hidden; position:relative; }
+    .hof-avatar img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+
+    @media (max-width: 900px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .menu-btn { display:block; }
+      .main { margin-left:0; padding-top:4.5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { .title-track { animation:none; } }
+
+    /* ---------- Centering fix ---------- */
+    .main { max-width:none; margin-left:240px; padding:2rem 2rem 3rem; }
+    .main > * { max-width:1000px; margin-left:auto; margin-right:auto; }
+    /* ---------- Sliders ---------- */
+    .media-duo { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:1.5rem; align-items:start; }
+    .player-box { padding:1.4rem 1rem 1.2rem; }
+    .box-label { text-align:center; font-size:.7rem; letter-spacing:.4em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:1rem; }
+    .slider-row { display:flex; align-items:center; gap:.6rem; }
+    .viewport { flex:1; overflow:hidden; border-radius:14px; min-width:0; }
+    .slides { display:flex; transition:transform .5s cubic-bezier(.23,1,.32,1); }
+    .slide { flex:0 0 100%; min-width:0; text-align:center; padding:0 2px; }
+    .slide h4 { margin:.2rem 0 .9rem; min-height:3.2rem; display:flex; align-items:center; justify-content:center; }
+    .slide audio, .slide video { margin-top:0; }
+    .slide video { aspect-ratio:16/9; object-fit:contain; }
+    .arrow {
+      flex:none; width:42px; height:42px; padding:0; border-radius:50%; font-size:1.7rem; line-height:1; letter-spacing:0;
+      background:rgba(255,255,255,.04); color:var(--metal-silver); border:1px solid var(--line);
+      display:flex; align-items:center; justify-content:center; padding-bottom:4px;
+    }
+    .arrow:hover { background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.3); }
+    .arrow:disabled { opacity:.25; cursor:default; }
+    .dots { display:flex; justify-content:center; gap:.5rem; margin-top:1rem; }
+    .dot { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.2); transition:all .3s; }
+    .dot.on { background:#fff; width:22px; border-radius:6px; }
+    @media (max-width:900px){ .main{ padding:4.5rem .8rem 2rem; } .media-duo{ grid-template-columns:1fr; } }
+
+    .top-box { max-width:620px; margin:0 auto; }
+    .list-slide { text-align:left; padding:0 .5rem; }
+    .list-slide h3 { text-align:center; font-size:1.5rem; margin-bottom:1rem; }
+    .list-slide ol, .list-slide ul { max-width:380px; margin:0 auto; }
+    .slide video { display:block; width:100%; border-radius:14px; background:#000; }
+    .slide video + h4 { margin:.9rem 0 .2rem; min-height:0; }
+
+    /* ---------- Equal boxes ---------- */
+    .media-duo { align-items:stretch; }
+    .player-box { display:flex; flex-direction:column; }
+    .player-box .slider-row { flex:1; align-items:center; }
+    .player-box .viewport { align-self:stretch; display:flex; align-items:center; }
+    .player-box .slides { width:100%; }
+    /* ---------- Top 10 cover-flow ---------- */
+    .cover-row { display:flex; align-items:center; gap:.6rem; }
+    .cover-stage { position:relative; flex:1; height:500px; overflow:hidden; --dx:300px; }
+    .cover-card {
+      position:absolute; top:0; left:50%; width:320px; height:100%; margin-left:-160px;
+      overflow:hidden; text-align:left; cursor:pointer;
+      transition:transform .55s cubic-bezier(.23,1,.32,1), opacity .55s ease, filter .55s ease, border-color .4s;
+      transform:translateX(0) scale(.6); opacity:0; pointer-events:none; z-index:1;
+    }
+    .cover-card h3 { text-align:center; font-size:1.4rem; }
+    .cover-card.pos-0 { transform:translateX(0) scale(1); opacity:1; pointer-events:auto; z-index:3; cursor:default; border-color:rgba(192,200,210,.35); box-shadow:0 0 40px rgba(255,255,255,.06); }
+    .cover-card.pos-l { transform:translateX(calc(var(--dx) * -1)) scale(.82); opacity:.45; filter:blur(.6px); pointer-events:auto; z-index:2; }
+    .cover-card.pos-r { transform:translateX(var(--dx)) scale(.82); opacity:.45; filter:blur(.6px); pointer-events:auto; z-index:2; }
+    .cover-card.pos-l:hover, .cover-card.pos-r:hover { opacity:.7; }
+    @media (max-width:900px){
+      .cover-stage { --dx:200px; height:520px; }
+      .cover-card { width:260px; margin-left:-130px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+  <div class="scrim" id="scrim"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">My World</div>
+    <div class="sidebar-tag">Menu</div>
+    <nav>
+      <a href="#playlist" class="active"><span class="ico">🎧</span>My Playlist</a>
+      <a href="#top10"><span class="ico">🏆</span>My Top 10</a>
+      <a href="#halloffame"><span class="ico">⭐</span>Hall of Fame</a>
+      <a href="#schedule"><span class="ico">🗓️</span>Weekly Sched</a>
+      <a href="#register"><span class="ico">📝</span>Registration Form</a>
+    </nav>
+    <div class="sidebar-foot">Fontanilla<br>Cliven Karl G.</div>
+  </aside>
+
+  <main class="main">
+
+    <header>
+      <div class="title-marquee" aria-label="Introduction to Computing">
+        <div class="title-track" aria-hidden="true"><span class="title-item">Introduction to Computing</span><span class="title-sep">✦</span><span class="title-item">Introduction to Computing</span><span class="title-sep">✦</span><span class="title-item">Introduction to Computing</span><span class="title-sep">✦</span><span class="title-item">Introduction to Computing</span><span class="title-sep">✦</span></div>
+      </div>
+      <p class="header-sub">Activity 4 · Multimedia Webpage</p>
+    </header>
+
+    <!-- PART 1: AUDIO & VIDEO PLAYLIST -->
+    <section class="section" id="playlist">
+      <div class="title-wrap">
+        <span class="section-eyebrow">Part 1</span>
+        <h2 class="section-title">My Playlist</h2>
+      </div>
+      <div class="media-duo">
+        <div class="card player-box" data-slider>
+          <div class="box-label">Audio</div>
+          <div class="slider-row">
+            <button class="arrow prev" aria-label="Previous">&#8249;</button>
+            <div class="viewport"><div class="slides"><div class="slide"><div class="preview"><span>🎵</span><img data-src="fein.jpg" alt="FE!N"></div><h4>Song 1: FE!N - Travis Scott ft. Playboi Carti</h4><audio id="song1" controls loop><source src="fein.mp3" type="audio/mpeg"></audio></div><div class="slide"><div class="preview"><span>🎵</span><img data-src="images.jfif" alt="Alam Mo Ba Gurl"></div><h4>Song 2: Alam Mo Ba Gurl - Hev Abi</h4><audio controls><source src="hev.mp3" type="audio/mpeg"></audio></div></div></div>
+            <button class="arrow next" aria-label="Next">&#8250;</button>
+          </div>
+          <div class="dots"><i class="dot on"></i><i class="dot"></i></div>
+        </div>
+        <div class="card player-box" data-slider>
+          <div class="box-label">Music Video</div>
+          <div class="slider-row">
+            <button class="arrow prev" aria-label="Previous">&#8249;</button>
+            <div class="viewport"><div class="slides"><div class="slide"><video controls data-poster="sad.jpg"><source src="xxxtentacion_sad.mp4" type="video/mp4"></video><h4>Music Video 1: SAD! - XXXTENTACION</h4></div><div class="slide"><video controls data-poster="redrum.jpg"><source src="21_savage_redrum.mp4" type="video/mp4"></video><h4>Music Video 2: Redrum - 21 Savage</h4></div></div></div>
+            <button class="arrow next" aria-label="Next">&#8250;</button>
+          </div>
+          <div class="dots"><i class="dot on"></i><i class="dot"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PART 2: MY TOP 10 LISTS -->
+    <section class="section" id="top10">
+      <div class="title-wrap">
+        <span class="section-eyebrow">Part 2</span>
+        <h2 class="section-title">My Top 10 Lists</h2>
+      </div>
+      <div class="cover-row" id="top10Cover">
+          <button class="arrow prev" aria-label="Previous">&#8249;</button>
+          <div class="cover-stage"><div class="cover-card card">
+          <h3>🎬 Top 10 Movies</h3>
+          <ol>
+            <li>Inception</li>
+            <li>Interstellar</li>
+            <li>The Dark Knight</li>
+            <li>Avatar</li>
+            <li>Titanic</li>
+            <li>Avengers: Endgame</li>
+            <li>The Godfather</li>
+            <li>Pulp Fiction</li>
+            <li>Forrest Gump</li>
+            <li>The Matrix</li>
+          </ol></div><div class="cover-card card">
+          <h3>🎵 Top 10 Songs</h3>
+          <ol>
+            <li>Alam Mo Ba Gurl - Hev Abi</li>
+            <li>Ang Huling El Bimbo - Eraserheads</li>
+            <li>SAD! - XXXTENTACION</li>
+            <li>Redrum - 21 Savage</li>
+            <li>Ginto Sa Pasay - Uncle Dags</li>
+            <li>Babaero - Hev Abi</li>
+            <li>Moonlight - XXXTENTACION</li>
+            <li>Bank Account - 21 Savage</li>
+            <li>Lil Kasalanan Shorty - Hev Abi</li>
+            <li>Jocelynang Baliwag - Uncle Dags</li>
+          </ol></div><div class="cover-card card">
+          <h3>⭐ Top 10 Idols</h3>
+          <ul id="idolList">
+            <li>Hev Abi</li>
+            <li>Uncle Dags</li>
+            <li>21 Savage</li>
+            <li>XXXTENTACION</li>
+            <li>Eraserheads</li>
+            <li>Travis Scott</li>
+            <li>Drake</li>
+            <li>Metro Boomin</li>
+            <li>Post Malone</li>
+            <li>Kendrick Lamar</li>
+          </ul></div><div class="cover-card card">
+          <h3>📁 My Idols by Category</h3>
+          <ul>
+            <li>Local (Pinoy Hip-Hop / Rock)
+              <ul>
+                <li>Hev Abi</li>
+                <li>Uncle Dags</li>
+                <li>Eraserheads</li>
+              </ul>
+            </li>
+            <li>International (Hip-Hop / Rap)
+              <ul>
+                <li>21 Savage</li>
+                <li>XXXTENTACION</li>
+                <li>Travis Scott</li>
+              </ul>
+            </li>
+          </ul></div></div>
+          <button class="arrow next" aria-label="Next">&#8250;</button>
+        </div>
+
+      <!-- Idols Hall of Fame carousel (auto-built from the Top 10 Idols list) -->
+      <div class="carousel-wrap" id="halloffame">
+        <div class="title-wrap" style="margin-bottom:1rem">
+          <h3 class="section-title" style="font-size:1.6rem">Hall of Fame</h3>
+        </div>
+        <div class="members-carousel" id="carousel">
+          <div class="members-track" id="idolTrack"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PART 3: WEEKLY SCHEDULE -->
+    <section class="section" id="schedule">
+      <div class="title-wrap">
+        <span class="section-eyebrow">Part 3</span>
+        <h2 class="section-title">Weekly Schedule</h2>
+      </div>
+      <div class="card">
+        <div class="table-responsive">
+          <table border="1">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>8:00 - 9:00</td><td>Gym 🏋️</td><td>School 🏫</td><td>Gym 🏋️</td><td>School 🏫</td></tr>
+              <tr><td>9:00 - 12:00</td><td>School 🏫</td><td>School 🏫</td><td>School 🏫</td><td>School 🏫</td></tr>
+              <tr><td>12:00 - 1:00</td><td>Lunch 🍽️</td><td>Lunch 🍽️</td><td>Lunch 🍽️</td><td>Lunch 🍽️</td></tr>
+              <tr><td>1:00 - 5:00</td><td>School 🏫</td><td>School 🏫</td><td>School 🏫</td><td>School 🏫</td></tr>
+              <tr><td>5:00 - 6:00</td><td>Exercise 🏃</td><td>Meeting 📋</td><td>Exercise 🏃</td><td>Meeting 📋</td></tr>
+              <tr><td>6:00 - 8:00</td><td>Dinner 🍕</td><td>Dinner 🍕</td><td>Dinner 🍕</td><td>Dinner 🍕</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PART 4: REGISTRATION FORM -->
+    <section class="section" id="register">
+      <div class="title-wrap">
+        <span class="section-eyebrow">Part 4</span>
+        <h2 class="section-title">Registration Form</h2>
+      </div>
+      <div class="card" style="padding:2rem">
+        <form onsubmit="event.preventDefault(); alert('Registered!'); window.scrollTo({top: 0, behavior: 'smooth'}); this.reset();">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="name@example.com">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required placeholder="Create a password">
+          </div>
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" required min="1" max="120" placeholder="Your age">
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+              <option value="" disabled selected>Select your gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country" name="country" required>
+              <option value="" disabled selected>Select your country</option>
+              <option value="Philippines">Philippines</option>
+              <option value="USA">USA</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message / Comment Box</label>
+            <textarea id="message" name="message" rows="5" placeholder="Leave a message..."></textarea>
+          </div>
+          <div class="button-group">
+            <button type="submit">Submit</button>
+            <button type="reset">Reset</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <p>Submitted by: Fontanilla Cliven Karl G. · Introduction to Computing</p>
+    </footer>
+  </main>
+
+  <!-- Splash -->
+  <div class="splash" id="splash" role="button" tabindex="0" aria-label="Enter site">
+    <div class="splash-bg" aria-hidden="true"></div>
+    <div class="splash-vignette" aria-hidden="true"></div>
+    <div class="splash-text">
+      <p class="splash-title">MY PLAYLIST, MY WORLD</p>
+      <p class="splash-sub">click anywhere</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+
+      // Finds an image whether it sits next to the HTML or inside an images folder
+      function findImg(file, cb) {
+        const paths = [file, 'images/' + file, 'images/previews/' + file, 'images/artists/' + file];
+        let k = 0;
+        (function next() {
+          if (k >= paths.length) return;
+          const im = new Image();
+          im.onload = () => cb(paths[k]);
+          im.onerror = () => { k++; next(); };
+          im.src = paths[k];
+        })();
+      }
+      document.querySelectorAll('img[data-src]').forEach(el => findImg(el.dataset.src, p => { el.src = p; }));
+      document.querySelectorAll('video[data-poster]').forEach(el => findImg(el.dataset.poster, p => { el.poster = p; }));
+
+      // Build the idol carousel from the Top 10 Idols list
+      const track = document.getElementById('idolTrack');
+      const slug = n => n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      const idols = Array.from(document.querySelectorAll('#idolList li')).map(li => li.textContent.trim());
+
+      idols.forEach(name => {
+        const item = document.createElement('div');
+        item.className = 'member-item';
+        item.innerHTML =
+          '<div class="hof-ring"><div class="hof-inner"><div class="hof-avatar"></div></div></div>' +
+          '<div class="member-name"></div>';
+        const av = item.querySelector('.hof-avatar');
+        av.textContent = name.charAt(0);
+        av.dataset.name = name;
+        findImg(slug(name) + '.jpg', src => {
+          document.querySelectorAll('.hof-avatar').forEach(a => {
+            if (a.dataset.name !== name) return;
+            const img = new Image(); img.alt = name; img.src = src;
+            a.textContent = ''; a.appendChild(img);
+          });
+        });
+        item.querySelector('.member-name').textContent = name;
+        track.appendChild(item);
+      });
+      // duplicate for seamless loop
+      Array.from(track.children).forEach(el => track.appendChild(el.cloneNode(true)));
+
+      const carousel = document.getElementById('carousel');
+      carousel.addEventListener('mouseenter', () => track.style.animationPlayState = 'paused');
+      carousel.addEventListener('mouseleave', () => track.style.animationPlayState = 'running');
+
+
+
+      // Prev/Next sliders
+      document.querySelectorAll('[data-slider]').forEach(box => {
+        const slides = box.querySelector('.slides'), dots = box.querySelectorAll('.dot');
+        const prev = box.querySelector('.prev'), next = box.querySelector('.next');
+        const total = dots.length; let i = 0;
+        function go(n) {
+          i = (n + total) % total;
+          slides.style.transform = 'translateX(' + (-100 * i) + '%)';
+          dots.forEach((d, k) => d.classList.toggle('on', k === i));
+          
+          box.querySelectorAll('audio,video').forEach((m, k) => { if (k !== i) m.pause(); });
+        }
+        prev.onclick = () => go(i - 1); next.onclick = () => go(i + 1);
+        go(0);
+      });
+
+
+      // Top 10 cover-flow (manual < >)
+      (function () {
+        const row = document.getElementById('top10Cover'); if (!row) return;
+        const cards = Array.from(row.querySelectorAll('.cover-card')), n = cards.length; let i = 0;
+        function render() {
+          cards.forEach((c, k) => {
+            const d = (k - i + n) % n;
+            c.className = 'cover-card card ' + (d === 0 ? 'pos-0' : d === 1 ? 'pos-r' : d === n - 1 ? 'pos-l' : 'pos-h');
+          });
+        }
+        const go = d => { i = (i + d + n) % n; render(); };
+        row.querySelector('.prev').onclick = () => go(-1);
+        row.querySelector('.next').onclick = () => go(1);
+        cards.forEach((c, k) => c.addEventListener('click', () => { if (k !== i) { i = k; render(); } }));
+        render();
+      })();
+
+      // Sidebar
+      const sb=document.getElementById('sidebar'), scrim=document.getElementById('scrim');
+      const toggle=o=>{sb.classList.toggle('open',o);scrim.classList.toggle('show',o);};
+      document.getElementById('menuBtn').onclick=()=>toggle(!sb.classList.contains('open'));
+      scrim.onclick=()=>toggle(false);
+      const links=[...sb.querySelectorAll('nav a')];
+      links.forEach(a=>a.addEventListener('click',()=>toggle(false)));
+      const io=new IntersectionObserver(es=>es.forEach(e=>{
+        if(e.isIntersecting) links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));
+      }),{rootMargin:'-35% 0px -55% 0px'});
+      links.forEach(a=>{const t=document.querySelector(a.getAttribute('href')); if(t) io.observe(t);});
+
+      // Splash: dismiss on click/Enter/Space or after 6s.
+      // The click also counts as user interaction, so Song 1's autoplay is allowed to start.
+      const splash = document.getElementById('splash');
+      const song1 = document.getElementById('song1');
+      let hidden = false;
+
+      function hideSplash(userInitiated) {
+        if (hidden) return;
+        hidden = true;
+        splash.classList.add('hide');
+        setTimeout(() => { splash.style.display = 'none'; }, 1000);
+        
+      }
+
+      splash.addEventListener('click', () => hideSplash(true));
+      splash.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hideSplash(true); }
+      });
+      setTimeout(() => hideSplash(false), 6000);
+    })();
+  </script>
+</body>
+</html>
